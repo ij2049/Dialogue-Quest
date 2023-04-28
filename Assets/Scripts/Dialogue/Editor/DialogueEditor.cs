@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEditor.Graphs;
 using UnityEngine;
 
 namespace RPG.Dialogue.Editor
@@ -61,8 +62,10 @@ namespace RPG.Dialogue.Editor
 
             else
             {
-                EditorGUILayout.LabelField(selectedDialogue.name);
-
+                foreach (DialogueNode node in selectedDialogue.GetAllNodes())
+                {
+                    EditorGUILayout.LabelField(node.text);
+                }
             }
         }
     }
