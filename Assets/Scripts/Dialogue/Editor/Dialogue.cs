@@ -11,7 +11,10 @@ namespace RPG.Dialogue
     public class Dialogue : ScriptableObject
     {
         [SerializeField] private List<DialogueNode> nodes;
-
+        
+        //#if is a preprocessor directive in C# that is processed by the compiler.
+        //Use for conditionally compile or exclude code based on certain conditions at compile time.
+#if UNITY_EDITOR
         //if the dialogue is created the interaction start
         private void Awake()
         {
@@ -20,7 +23,10 @@ namespace RPG.Dialogue
                 nodes.Add(new DialogueNode());                
             }
         }
+#endif
+        public IEnumerable<DialogueNode> GetAllNodes()
+        {
+            return nodes;
+        }
     }
 }
-
-
