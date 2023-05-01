@@ -13,7 +13,23 @@ MonoBehaviour:
   m_Name: New Dialogue
   m_EditorClassIdentifier: 
   nodes:
-  - uniqueTD: a
+  - uniqueID: b
     text: hello
     children:
     - 
+    rect:
+      serializedVersion: 2
+      x: 273
+      y: 234
+      width: 200
+      height: 100
+  - uniqueID: cv
+    text: dddd
+    children:
+    - 
+    rect:
+      serializedVersion: 2
+      x: 273
+      y: 234
+      width: 200
+      height: 100

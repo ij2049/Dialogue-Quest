@@ -13,6 +13,32 @@ MonoBehaviour:
   m_Name: New Dialogue 1
   m_EditorClassIdentifier: 
   nodes:
-  - uniqueTD: b
-    text: world
+  - uniqueID: a
+    text: apple
+    children:
+    - b
+    - c
+    rect:
+      serializedVersion: 2
+      x: 52
+      y: 23
+      width: 200
+      height: 140
+  - uniqueID: b
+    text: banana
     children: []
+    rect:
+      serializedVersion: 2
+      x: 438
+      y: 67
+      width: 200
+      height: 100
+  - uniqueID: c
+    text: call
+    children: []
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 182
+      width: 200
+      height: 100
