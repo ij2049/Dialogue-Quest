@@ -14,10 +14,6 @@ namespace RPG.Dialogue
         [SerializeField] private List<DialogueNode> nodes = new List<DialogueNode>();
 
         private Dictionary<string, DialogueNode> nodeLookUp = new Dictionary<string, DialogueNode>();
-<<<<<<< HEAD
-=======
-        
->>>>>>> main
         //#if is a preprocessor directive in C# that is processed by the compiler.
         //Use for conditionally compile or exclude code based on certain conditions at compile time.
 #if UNITY_EDITOR
@@ -41,7 +37,6 @@ namespace RPG.Dialogue
                 nodeLookUp[_node.uniqueID] = _node;
             }
         }
-<<<<<<< HEAD
 
         //nodes information
         public IEnumerable<DialogueNode> GetAllNodes()
@@ -74,32 +69,6 @@ namespace RPG.Dialogue
             parent.children.Add(newNode.uniqueID);
             nodes.Add(newNode);
             OnValidate();
-=======
-
-        //nodes information
-        public IEnumerable<DialogueNode> GetAllNodes()
-        {
-            return nodes;
-        }
-
-        public DialogueNode GetRootNode()
-        {
-            //initial(root) node return
-            return nodes[0];
-        }
-
-        //Get DialogueNode and find a information by childID
-        public IEnumerable<DialogueNode> GetAllChildren(DialogueNode _parentNode)
-        {
-            List<DialogueNode> result = new List<DialogueNode>();
-            foreach (string childID in _parentNode.children)
-            {
-                if (nodeLookUp.ContainsKey(childID))
-                {
-                    yield return nodeLookUp[childID];
-                }
-            }
->>>>>>> main
         }
     }
 }

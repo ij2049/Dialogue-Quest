@@ -13,16 +13,10 @@ namespace RPG.Dialogue.Editor
     public class DialogueEditor : EditorWindow
     {
         private Dialogue selectedDialogue = null;
-<<<<<<< HEAD
         [NonSerialized] private GUIStyle nodeStyle;
         [NonSerialized] private DialogueNode draggingNode = null;
         [NonSerialized] private Vector2 draggingOffset;
         [NonSerialized] private DialogueNode creatingNode = null;
-=======
-        private GUIStyle nodeStyle;
-        private DialogueNode draggingNode = null;
-        private Vector2 draggingOffset;
->>>>>>> main
         
         //show editor from window panel
         [MenuItem("Window/Dialogue Editor")]
@@ -82,7 +76,6 @@ namespace RPG.Dialogue.Editor
             else
             {
                 ProcessEvents();
-<<<<<<< HEAD
                 foreach (DialogueNode _node in selectedDialogue.GetAllNodes())
                 {
                     DrawConnections(_node);
@@ -169,62 +162,6 @@ namespace RPG.Dialogue.Editor
             }
         }
 
-=======
-                foreach (DialogueNode node in selectedDialogue.GetAllNodes())
-                {
-                    //rectangle grouping size
-                    GUILayout.BeginArea(node.rect, nodeStyle);
-                    EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.LabelField("Node : ", EditorStyles.whiteLabel);
-                    
-                    string newText = EditorGUILayout.TextField(node.text);
-                    string newUniqueID = EditorGUILayout.TextField(node.uniqueID);
-                    
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        Undo.RecordObject(selectedDialogue, "Update Dialogue Text");
-                        node.text = newText;
-                        node.uniqueID = newUniqueID;
-                    }
-
-                    foreach (DialogueNode childNode in selectedDialogue.GetAllChildren(node))
-                    {
-                        EditorGUILayout.LabelField(childNode.text);
-                    }
-
-                    GUILayout.EndArea(); //end rectangle grouping size
-                }
-            }
-        }
-        
-        private void ProcessEvents()
-        {
-            //dragging
-            if (Event.current.type == EventType.MouseDown && draggingNode == null)
-            {
-                draggingNode = GetNodeAtPoint(Event.current.mousePosition);
-                if (draggingNode != null)
-                {
-                    draggingOffset = draggingNode.rect.position - Event.current.mousePosition;
-                }
-            }
-            
-            else if (Event.current.type == EventType.MouseDrag && draggingNode != null)
-            {
-                //track the position
-                Undo.RecordObject(selectedDialogue, "Move Dialogue Node");
-                draggingNode.rect.position = Event.current.mousePosition + draggingOffset;
-                GUI.changed = true;
-            }
-            
-            //stop dragging
-            else if (Event.current.type == EventType.MouseUp && draggingNode != null)
-            {
-                draggingNode = null;
-            }
-        }
-
->>>>>>> main
         private DialogueNode GetNodeAtPoint(Vector2 _point)
         {
             DialogueNode foundNode = null;
