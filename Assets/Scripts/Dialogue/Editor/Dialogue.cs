@@ -11,10 +11,9 @@ namespace RPG.Dialogue
     [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue", order = 0)]
     public class Dialogue : ScriptableObject
     {
-        [SerializeField] private List<DialogueNode> nodes;
+        [SerializeField] private List<DialogueNode> nodes = new List<DialogueNode>();
 
         private Dictionary<string, DialogueNode> nodeLookUp = new Dictionary<string, DialogueNode>();
-        
         //#if is a preprocessor directive in C# that is processed by the compiler.
         //Use for conditionally compile or exclude code based on certain conditions at compile time.
 #if UNITY_EDITOR
@@ -23,7 +22,9 @@ namespace RPG.Dialogue
         {
             if (nodes.Count == 0)
             {
-                nodes.Add(new DialogueNode());                
+                DialogueNode rootNode = new DialogueNode();
+                rootNode.uniqueID = Guid.NewGuid().ToString();
+                nodes.Add(rootNode);
             }
         }
 #endif
@@ -52,7 +53,6 @@ namespace RPG.Dialogue
         //Get DialogueNode and find a information by childID
         public IEnumerable<DialogueNode> GetAllChildren(DialogueNode _parentNode)
         {
-            List<DialogueNode> result = new List<DialogueNode>();
             foreach (string childID in _parentNode.children)
             {
                 if (nodeLookUp.ContainsKey(childID))
@@ -60,6 +60,15 @@ namespace RPG.Dialogue
                     yield return nodeLookUp[childID];
                 }
             }
+        }
+
+        public void CreateNode(DialogueNode parent)
+        {
+            DialogueNode newNode = new DialogueNode();
+            newNode.uniqueID = Guid.NewGuid().ToString();
+            parent.children.Add(newNode.uniqueID);
+            nodes.Add(newNode);
+            OnValidate();
         }
     }
 }

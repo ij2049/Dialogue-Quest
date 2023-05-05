@@ -13,9 +13,10 @@ namespace RPG.Dialogue.Editor
     public class DialogueEditor : EditorWindow
     {
         private Dialogue selectedDialogue = null;
-        private GUIStyle nodeStyle;
-        private DialogueNode draggingNode = null;
-        private Vector2 draggingOffset;
+        [NonSerialized] private GUIStyle nodeStyle;
+        [NonSerialized] private DialogueNode draggingNode = null;
+        [NonSerialized] private Vector2 draggingOffset;
+        [NonSerialized] private DialogueNode creatingNode = null;
         
         //show editor from window panel
         [MenuItem("Window/Dialogue Editor")]
@@ -26,7 +27,7 @@ namespace RPG.Dialogue.Editor
         }
         
         //double click on the project folder, interaction happens
-        [OnOpenAssetAttribute(1)]
+        [OnOpenAsset(1)]
         public static bool OpenDialogue(int instanceID, int line)
         {
             //get ID and try to find the object. if there is no object, return null
@@ -64,6 +65,7 @@ namespace RPG.Dialogue.Editor
             }
         }
 
+        //text & ID showing on the editor (text info can change on the editor) 
         private void OnGUI()
         {
             if (selectedDialogue == null)
@@ -74,33 +76,65 @@ namespace RPG.Dialogue.Editor
             else
             {
                 ProcessEvents();
-                foreach (DialogueNode node in selectedDialogue.GetAllNodes())
+                foreach (DialogueNode _node in selectedDialogue.GetAllNodes())
                 {
-                    //rectangle grouping size
-                    GUILayout.BeginArea(node.rect, nodeStyle);
-                    EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.LabelField("Node : ", EditorStyles.whiteLabel);
-                    
-                    string newText = EditorGUILayout.TextField(node.text);
-                    string newUniqueID = EditorGUILayout.TextField(node.uniqueID);
-                    
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        Undo.RecordObject(selectedDialogue, "Update Dialogue Text");
-                        node.text = newText;
-                        node.uniqueID = newUniqueID;
-                    }
-
-                    foreach (DialogueNode childNode in selectedDialogue.GetAllChildren(node))
-                    {
-                        EditorGUILayout.LabelField(childNode.text);
-                    }
-
-                    GUILayout.EndArea(); //end rectangle grouping size
+                    DrawConnections(_node);
+                }
+                foreach (DialogueNode _node in selectedDialogue.GetAllNodes())
+                {
+                    DrawNode(_node);
+                }
+                if(creatingNode != null)
+                {
+                    Undo.RecordObject(selectedDialogue, "Added Dialogue Node");
+                    selectedDialogue.CreateNode(creatingNode);
+                    creatingNode = null;
                 }
             }
         }
-        
+
+        //drawing dialogue panel bezier(line), 노드 선 그리기
+        private void DrawConnections(DialogueNode _node)
+        {
+            Vector3 startPosition = new Vector2(_node.rect.xMax, _node.rect.center.y);
+            
+            foreach (DialogueNode childNode in selectedDialogue.GetAllChildren(_node))
+            {
+                Vector3 endPosition = new Vector2(childNode.rect.xMin, childNode.rect.center.y);
+                Vector3 controlPointOffset = endPosition - startPosition;
+                controlPointOffset.y = 0;
+                controlPointOffset.x *= 0.8f;
+                Handles.DrawBezier(
+                    startPosition, endPosition, 
+                    startPosition + controlPointOffset, 
+                    endPosition - controlPointOffset, 
+                    Color.white, null, 4f);
+            }
+        }
+
+        private void DrawNode(DialogueNode _node)
+        {
+
+            //rectangle grouping size
+            GUILayout.BeginArea(_node.rect, nodeStyle);
+            EditorGUI.BeginChangeCheck();
+                
+            string newText = EditorGUILayout.TextField(_node.text);
+                
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(selectedDialogue, "Update Dialogue Text");
+                _node.text = newText;
+            }
+
+            if(GUILayout.Button("+"));
+            {
+                creatingNode = _node;
+            }
+
+            GUILayout.EndArea(); //end rectangle grouping size
+        }
+
         private void ProcessEvents()
         {
             //dragging
