@@ -17,6 +17,9 @@ namespace RPG.Dialogue.Editor
         [NonSerialized] private DialogueNode draggingNode = null;
         [NonSerialized] private Vector2 draggingOffset;
         [NonSerialized] private DialogueNode creatingNode = null;
+        [NonSerialized] private DialogueNode deletingNode = null;
+        [NonSerialized] private DialogueNode linkingParentNode = null;
+        private Vector2 scrollPosition;
         
         //show editor from window panel
         [MenuItem("Window/Dialogue Editor")]
@@ -76,6 +79,12 @@ namespace RPG.Dialogue.Editor
             else
             {
                 ProcessEvents();
+
+                scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+                Debug.Log(scrollPosition);
+
+                GUILayoutUtility.GetRect(4000, 4000);
+
                 foreach (DialogueNode _node in selectedDialogue.GetAllNodes())
                 {
                     DrawConnections(_node);
@@ -84,11 +93,21 @@ namespace RPG.Dialogue.Editor
                 {
                     DrawNode(_node);
                 }
+                
+                EditorGUILayout.EndScrollView();
+                
                 if(creatingNode != null)
                 {
                     Undo.RecordObject(selectedDialogue, "Added Dialogue Node");
                     selectedDialogue.CreateNode(creatingNode);
                     creatingNode = null;
+                }
+
+                if (deletingNode != null)
+                {
+                    Undo.RecordObject(selectedDialogue, "Deleted Dialogue Node");
+                    selectedDialogue.DeleteNode(deletingNode);
+                    deletingNode = null;
                 }
             }
         }
@@ -120,19 +139,67 @@ namespace RPG.Dialogue.Editor
             EditorGUI.BeginChangeCheck();
                 
             string newText = EditorGUILayout.TextField(_node.text);
-                
+            
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(selectedDialogue, "Update Dialogue Text");
                 _node.text = newText;
             }
+            
+            GUILayout.BeginHorizontal();
 
-            if(GUILayout.Button("+"));
+            if(GUILayout.Button("+"))
             {
                 creatingNode = _node;
             }
 
+            DarwLinkButton(_node);
+
+            if(GUILayout.Button("X"))
+            {
+                deletingNode = _node;
+            }
+            GUILayout.EndHorizontal();
             GUILayout.EndArea(); //end rectangle grouping size
+        }
+
+        private void DarwLinkButton(DialogueNode _node)
+        {
+            if (linkingParentNode == null)
+            {
+                if (GUILayout.Button("Link"))
+                {
+                    linkingParentNode = _node;
+                }
+            }
+
+            else if(linkingParentNode == _node)
+            {
+                if (GUILayout.Button("Cancel"))
+                {
+                    linkingParentNode = null;
+                }
+            }
+            
+            else if (linkingParentNode.children.Contains(_node.uniqueID))
+            {
+                if (GUILayout.Button("Unlink"))
+                {
+                    Undo.RecordObject(selectedDialogue, "Remove Dialogue Link");
+                    linkingParentNode.children.Remove(_node.uniqueID);
+                    linkingParentNode = null;
+                }
+            }
+
+            else
+            {
+                if (GUILayout.Button("Child"))
+                {
+                    Undo.RecordObject(selectedDialogue, "Add Dialogue Link");
+                    linkingParentNode.children.Add(_node.uniqueID);
+                    linkingParentNode = null;
+                }
+            }
         }
 
         private void ProcessEvents()
@@ -140,7 +207,7 @@ namespace RPG.Dialogue.Editor
             //dragging
             if (Event.current.type == EventType.MouseDown && draggingNode == null)
             {
-                draggingNode = GetNodeAtPoint(Event.current.mousePosition);
+                draggingNode = GetNodeAtPoint(Event.current.mousePosition + scrollPosition);
                 if (draggingNode != null)
                 {
                     draggingOffset = draggingNode.rect.position - Event.current.mousePosition;

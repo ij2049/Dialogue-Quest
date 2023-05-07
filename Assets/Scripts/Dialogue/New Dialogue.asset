@@ -13,23 +13,41 @@ MonoBehaviour:
   m_Name: New Dialogue
   m_EditorClassIdentifier: 
   nodes:
-  - uniqueID: b
-    text: hello
+  - uniqueID: 6e0dd401-fb71-4394-9b11-f532207a2c07
+    text: Hello
     children:
-    - 
+    - d98b0003-a863-470a-8724-e66fea14d312
     rect:
       serializedVersion: 2
-      x: 273
-      y: 234
+      x: 138
+      y: 99
       width: 200
       height: 100
-  - uniqueID: cv
-    text: dddd
+  - uniqueID: 788e8deb-56e6-4e49-84fe-9a09a00dbb4f
+    text: 
     children:
-    - 
+    - f424857b-b517-432a-a0a9-4b752e3688ed
     rect:
       serializedVersion: 2
-      x: 273
-      y: 234
+      x: 435
+      y: 64
+      width: 200
+      height: 100
+  - uniqueID: f424857b-b517-432a-a0a9-4b752e3688ed
+    text: 
+    children: []
+    rect:
+      serializedVersion: 2
+      x: 671
+      y: 163
+      width: 200
+      height: 100
+  - uniqueID: 5ece094d-c993-43c6-b237-a66ae2950e9e
+    text: 
+    children: []
+    rect:
+      serializedVersion: 2
+      x: 401
+      y: 304
       width: 200
       height: 100
