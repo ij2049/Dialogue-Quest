@@ -19,7 +19,13 @@ namespace RPG.Dialogue.Editor
         [NonSerialized] private DialogueNode creatingNode = null;
         [NonSerialized] private DialogueNode deletingNode = null;
         [NonSerialized] private DialogueNode linkingParentNode = null;
+        [NonSerialized] private bool draggingCanvas = false;
+        [NonSerialized] private Vector2 draggingCanvasOffset;
         private Vector2 scrollPosition;
+        
+        private const float canvasSize = 4000;
+        private const float backgroundSize = 50;
+        
         
         //show editor from window panel
         [MenuItem("Window/Dialogue Editor")]
@@ -83,8 +89,11 @@ namespace RPG.Dialogue.Editor
                 scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
                 Debug.Log(scrollPosition);
 
-                GUILayoutUtility.GetRect(4000, 4000);
-
+                Rect canvas = GUILayoutUtility.GetRect(canvasSize, canvasSize);
+                Texture2D backgroundTex = Resources.Load("background") as Texture2D;
+                Rect textCoords = new Rect(0, 0, canvasSize / backgroundSize, canvasSize / backgroundSize);
+                GUI.DrawTextureWithTexCoords(canvas, backgroundTex, textCoords);
+                
                 foreach (DialogueNode _node in selectedDialogue.GetAllNodes())
                 {
                     DrawConnections(_node);
@@ -212,6 +221,12 @@ namespace RPG.Dialogue.Editor
                 {
                     draggingOffset = draggingNode.rect.position - Event.current.mousePosition;
                 }
+
+                else
+                {
+                    draggingCanvas = true;
+                    draggingCanvasOffset = Event.current.mousePosition + scrollPosition;
+                }
             }
             
             else if (Event.current.type == EventType.MouseDrag && draggingNode != null)
@@ -219,6 +234,15 @@ namespace RPG.Dialogue.Editor
                 //track the position
                 Undo.RecordObject(selectedDialogue, "Move Dialogue Node");
                 draggingNode.rect.position = Event.current.mousePosition + draggingOffset;
+                
+                //update scrollPosition
+                GUI.changed = true;
+            }
+            
+            else if (Event.current.type == EventType.MouseDrag && draggingCanvas)
+            {
+                scrollPosition = draggingCanvasOffset - Event.current.mousePosition;
+
                 GUI.changed = true;
             }
             
@@ -226,6 +250,10 @@ namespace RPG.Dialogue.Editor
             else if (Event.current.type == EventType.MouseUp && draggingNode != null)
             {
                 draggingNode = null;
+            }
+            else if (Event.current.type == EventType.MouseUp && draggingCanvas)
+            {
+                draggingCanvas = false;
             }
         }
 
