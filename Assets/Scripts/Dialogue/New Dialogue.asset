@@ -1,5 +1,46 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3718575658118607872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52fd2da543597e4a855208889cf4ed1, type: 3}
+  m_Name: b38cc9b6-4a17-435d-8bbc-f220f6ea120c
+  m_EditorClassIdentifier: 
+  text: 
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 365
+    y: 245
+    width: 200
+    height: 100
+--- !u!114 &-1894712471609251997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52fd2da543597e4a855208889cf4ed1, type: 3}
+  m_Name: 453f2c1d-de71-4089-b2e7-db94972e42ca
+  m_EditorClassIdentifier: 
+  text: 
+  children:
+  - b38cc9b6-4a17-435d-8bbc-f220f6ea120c
+  rect:
+    serializedVersion: 2
+    x: 73
+    y: 132
+    width: 200
+    height: 100
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,41 +54,5 @@ MonoBehaviour:
   m_Name: New Dialogue
   m_EditorClassIdentifier: 
   nodes:
-  - uniqueID: 6e0dd401-fb71-4394-9b11-f532207a2c07
-    text: Hello
-    children:
-    - d98b0003-a863-470a-8724-e66fea14d312
-    rect:
-      serializedVersion: 2
-      x: 138
-      y: 99
-      width: 200
-      height: 100
-  - uniqueID: 788e8deb-56e6-4e49-84fe-9a09a00dbb4f
-    text: 
-    children:
-    - f424857b-b517-432a-a0a9-4b752e3688ed
-    rect:
-      serializedVersion: 2
-      x: 435
-      y: 64
-      width: 200
-      height: 100
-  - uniqueID: f424857b-b517-432a-a0a9-4b752e3688ed
-    text: 
-    children: []
-    rect:
-      serializedVersion: 2
-      x: 671
-      y: 163
-      width: 200
-      height: 100
-  - uniqueID: 5ece094d-c993-43c6-b237-a66ae2950e9e
-    text: 
-    children: []
-    rect:
-      serializedVersion: 2
-      x: 401
-      y: 304
-      width: 200
-      height: 100
+  - {fileID: -1894712471609251997}
+  - {fileID: -3718575658118607872}
