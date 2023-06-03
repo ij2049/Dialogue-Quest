@@ -40,11 +40,11 @@ namespace RPG.Dialogue
             return nodes;
         }
 
-        public DialogueNode GetRootNode()
+        /*public DialogueNode GetRootNode()
         {
             //initial(root) node return
             return nodes[0];
-        }
+        }*/
 
         //Get DialogueNode and find a information by childID
         public IEnumerable<DialogueNode> GetAllChildren(DialogueNode _parentNode)

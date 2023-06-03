@@ -32,7 +32,6 @@ namespace RPG.Dialogue.Editor
         [MenuItem("Window/Dialogue Editor")]
         public static void ShowEditorWindow()
         {
-            //utility true/false -> using once(true) or not(false)
             GetWindow(typeof(DialogueEditor), false, "Dialogue Editor");
         }
         
@@ -100,14 +99,14 @@ namespace RPG.Dialogue.Editor
                 Rect textCoords = new Rect(0, 0, canvasSize / backgroundSize, canvasSize / backgroundSize);
                 GUI.DrawTextureWithTexCoords(canvas, backgroundTex, textCoords);
                 
-                foreach (DialogueNode _node in selectedDialogue.GetAllNodes())
+                foreach (DialogueNode node in selectedDialogue.GetAllNodes())
                 {
-                    DrawConnections(_node);
+                    DrawConnections(node);
                 }
                 
-                foreach (DialogueNode _node in selectedDialogue.GetAllNodes())
+                foreach (DialogueNode node in selectedDialogue.GetAllNodes())
                 {
-                    DrawNode(_node);
+                    DrawNode(node);
                 }
                 
                 EditorGUILayout.EndScrollView();
